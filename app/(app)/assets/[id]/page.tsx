@@ -49,6 +49,7 @@ export default async function AssetDetailPage({ params }: { params: Promise<{ id
               {asset.status}
             </span>
 
+            {/* BUTANG EDIT & DELETE (ADMIN SAHAJA) */}
             {isAdmin && (
               <div className="flex gap-2 ml-2 border-l pl-2 border-slate-200">
                 <Link href={`/assets/${id}/edit`} className="p-2 border rounded-lg hover:bg-slate-50 text-slate-600 transition-colors" title="Edit">
@@ -84,52 +85,52 @@ export default async function AssetDetailPage({ params }: { params: Promise<{ id
         </div>
       </div>
 
-      {isAdmin && (
-        <div className="bg-white border rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-800 mb-4">Record Movement</h2>
-          <form action={recordMovement} className="space-y-4">
-            <input type="hidden" name="asset_id" value={id} />
+      {/* BORANG PERGERAKAN (TERBUKA UNTUK SEMUA STAFF & ADMIN) */}
+      <div className="bg-white border rounded-xl p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-slate-800 mb-4">Record Movement</h2>
+        <form action={recordMovement} className="space-y-4">
+          <input type="hidden" name="asset_id" value={id} />
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Action</label>
+              <select name="movement_type" required className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="check_out">Check Out (Take item)</option>
+                <option value="check_in">Check In (Return item)</option>
+                <option value="transfer">Transfer (Move location)</option>
+                <option value="maintenance">Send to Maintenance</option>
+              </select>
+            </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Action</label>
-                <select name="movement_type" required className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="check_out">Check Out (Assign to user)</option>
-                  <option value="check_in">Check In (Return to store)</option>
-                  <option value="transfer">Transfer (Move location)</option>
-                  <option value="maintenance">Send to Maintenance</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Assign To (Staff)</label>
-                <select name="to_user" className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="">-- None --</option>
-                  {profiles?.map((p) => <option key={p.id} value={p.id}>{p.full_name}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">New Location</label>
-                <select name="to_location_id" className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="">-- Keep Current --</option>
-                  {locations?.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
-                </select>
-              </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Assign To (Staff)</label>
+              <select name="to_user" className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Myself --</option>
+                {profiles?.map((p) => <option key={p.id} value={p.id}>{p.full_name}</option>)}
+              </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Notes (Optional)</label>
-              <input name="notes" className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g: Taking for project Alpha..." />
+              <label className="block text-sm font-medium mb-1">New Location</label>
+              <select name="to_location_id" className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Keep Current --</option>
+                {locations?.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
+              </select>
             </div>
+          </div>
 
-            <button className="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-900 font-medium text-sm transition-colors">
-              Save Movement
-            </button>
-          </form>
-        </div>
-      )}
+          <div>
+            <label className="block text-sm font-medium mb-1">Notes (Optional)</label>
+            <input name="notes" className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="E.g: Taking for project Alpha..." />
+          </div>
 
+          <button className="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-900 font-medium text-sm transition-colors">
+            Save Movement
+          </button>
+        </form>
+      </div>
+
+      {/* SEJARAH PERGERAKAN */}
       <div className="bg-white border rounded-xl p-6 shadow-sm">
         <h2 className="text-lg font-bold text-slate-800 mb-4">Movement History</h2>
         {!movements?.length ? (
