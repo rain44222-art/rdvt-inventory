@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, MapPin, Search, FilterX } from 'lucide-react'
 
+export const instant = false
+
 export default async function AssetsPage({
   searchParams,
 }: {
@@ -14,19 +16,16 @@ export default async function AssetsPage({
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user!.id).single()
   const isAdmin = profile?.role === 'admin'
 
-  // Ambil data untuk dropdown filter
   const [{ data: categories }, { data: locations }] = await Promise.all([
     supabase.from('categories').select('*').order('name'),
     supabase.from('locations').select('*').order('rack_code').order('level'),
   ])
 
-  // Query asas
   let query = supabase
     .from('assets')
     .select('*, category:categories(name), location:locations(label)')
     .order('created_at', { ascending: false })
 
-  // Apply Search & Filter
   if (params.q) query = query.or(`name.ilike.%${params.q}%,brand.ilike.%${params.q}%,model.ilike.%${params.q}%`)
   if (params.cat) query = query.eq('category_id', params.cat)
   if (params.loc) query = query.eq('location_id', params.loc)
@@ -45,7 +44,6 @@ export default async function AssetsPage({
         )}
       </div>
 
-      {/* SEARCH & FILTER BAR */}
       <form className="bg-white p-4 rounded-xl border shadow-sm grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
         <div className="col-span-2 md:col-span-1">
           <label className="block text-xs font-medium text-slate-500 mb-1">Search</label>
@@ -98,7 +96,6 @@ export default async function AssetsPage({
 
       <p className="text-sm text-slate-500">Showing {assets?.length || 0} assets</p>
 
-      {/* Mobile Card View */}
       <div className="md:hidden space-y-3">
         {assets?.map((a) => (
           <Link href={`/assets/${a.id}`} key={a.id} className="block bg-white p-4 rounded-xl border shadow-sm hover:border-blue-400 transition-colors">
@@ -123,7 +120,6 @@ export default async function AssetsPage({
         {!assets?.length && <p className="text-center text-slate-500 py-8">No assets found matching your search.</p>}
       </div>
 
-      {/* Desktop Table View */}
       <div className="hidden md:block bg-white rounded-xl border shadow-sm overflow-hidden">
         <table className="w-full text-sm text-left">
           <thead className="bg-slate-50 border-b">

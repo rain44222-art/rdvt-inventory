@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { ArrowLeftRight, Clock, User, MapPin } from 'lucide-react'
 
+export const instant = false
+
 export default async function MovementsPage() {
   const supabase = await createClient()
 

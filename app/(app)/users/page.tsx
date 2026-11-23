@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { createStaff } from './actions'
 import { UserPlus } from 'lucide-react'
 
+export const instant = false
+
 export default async function UsersPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -17,7 +19,6 @@ export default async function UsersPage() {
       <h1 className="text-2xl font-bold text-slate-800">User Management</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* BORANG TAMBAH STAFF */}
         <div className="bg-white border rounded-xl p-5 shadow-sm h-fit">
           <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
             <UserPlus size={20} /> Add New Staff
@@ -41,7 +42,6 @@ export default async function UsersPage() {
           </form>
         </div>
 
-        {/* SENARAI STAFF */}
         <div className="bg-white border rounded-xl p-5 shadow-sm">
           <h2 className="text-lg font-bold text-slate-800 mb-4">Current Users</h2>
           <ul className="divide-y divide-slate-100">

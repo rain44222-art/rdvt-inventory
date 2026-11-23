@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import AssetForm from '@/components/AssetForm'
 import { createAsset } from '../actions'
 
+export const instant = false
+
 export default async function NewAssetPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

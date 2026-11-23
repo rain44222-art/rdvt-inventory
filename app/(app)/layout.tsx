@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Nav from '@/components/Nav'
 
-// Baris 'export const dynamic' dah dibuang sebab dah tak compatible dengan Next.js 16
+export const instant = false
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()

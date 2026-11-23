@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { ArrowLeft, MapPin, Box, Clock, User, Pencil, Trash2 } from 'lucide-react'
 import { recordMovement, deleteAsset } from '../actions'
 
+export const instant = false
+
 export default async function AssetDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
@@ -142,7 +144,6 @@ export default async function AssetDetailPage({ params }: { params: Promise<{ id
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-slate-50 p-4 rounded-lg border shadow-sm">
                   <div className="flex justify-between items-start mb-2">
                     <span className="font-bold text-slate-800 capitalize">{m.movement_type.replace('_', ' ')}</span>
-                    {/* Tukar format tarikh supaya jadi statik (tahun-bulan-hari) */}
                     <span className="text-xs text-slate-500">{m.created_at.substring(0, 10)}</span>
                   </div>
                   <p className="text-sm text-slate-600">

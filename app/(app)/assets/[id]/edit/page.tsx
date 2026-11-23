@@ -5,13 +5,14 @@ import { updateAsset } from '../../actions'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
+export const instant = false
+
 export default async function EditAssetPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user!.id).single()
   
-  // Hanya admin boleh edit
   if (profile?.role !== 'admin') redirect(`/assets/${id}`)
 
   const [{ data: asset }, { data: categories }, { data: locations }] = await Promise.all([
@@ -22,7 +23,6 @@ export default async function EditAssetPage({ params }: { params: Promise<{ id: 
 
   if (!asset) notFound()
 
-  // Bind ID asset ke dalam fungsi update
   const action = updateAsset.bind(null, id)
 
   return (
